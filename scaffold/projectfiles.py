@@ -24,7 +24,7 @@ def write_setup(project_name, root_dir):
 def write_tests(project_name, root_dir):
     """Writes tests/PROJECT_NAME_tests.py file to disk"""
     #Get the path for setup.py
-    filename = "{project_name}_tests.py".format(project_name=project_name)
+    filename = f"{project_name}_tests.py"
     test_path = get_file_path(root_dir, "tests", filename) 
     test_content = get_test_text(project_name)
     with open(test_path, 'w') as test_file:
@@ -51,11 +51,7 @@ def write_inits(project_name, root_dir):
     print_file(init_paths['project'])
     
 def print_file(path, prefix=' ++++++'):
-    print(
-    "create: {prefix} {path_}".format(
-        prefix=prefix,
-        path_=os.path.abspath(path))
-    )
+    print(f"create: {prefix} {path.abspath(path)}")
 
 def get_file_path(root_dir, sub_dir, filename):
     if sub_dir == None: #In case we're writing directly to the root directory
@@ -68,7 +64,11 @@ def get_file_path(root_dir, sub_dir, filename):
 
 def get_setup_text(project_name):
     #This is quite ghetto, and can probably be improved
-    setup_text = """
+    project = project_name, 
+    author = get_user_name_from_git() or "My Name"
+    author_email = get_user_email_from_git() or "My email."
+    
+    setup_text = f"""
         try:
             from setuptools import setup
         except ImportError:
@@ -76,7 +76,7 @@ def get_setup_text(project_name):
 
         config = {{
             'description': 'My Project',
-            'author': '{author}',
+            'author': '{author}
             'url': 'URL to get it at.',
             'download_url': 'Where to download it.',
             'author_email': '{author_email}',
@@ -89,18 +89,15 @@ def get_setup_text(project_name):
 
         setup(**config)
 
-    """.format(
-            project = project_name, 
-            author = get_user_name_from_git() or "My Name", 
-            author_email = get_user_email_from_git() or "My email.")
+    """
 
     return dedent(setup_text)
 
 def get_test_text(project_name):
     #Again, quite ghetto and can probably be improved, but it works
-    test_text = """
+    test_text = f"""
         from nose.tools import *
-        import {PROJECT}
+        import {project_name}
 
         def setup():
             print("SETUP!")
@@ -110,7 +107,7 @@ def get_test_text(project_name):
 
         def test_basic():
             print("I RAN!")
-    """.format(PROJECT=project_name)
+    """
     
     return dedent(test_text)
 

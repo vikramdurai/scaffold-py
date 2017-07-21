@@ -8,12 +8,12 @@ def create_folders(project_name, current_directory):
 
     if os.path.exists(root_dir) and os.listdir(root_dir):
         #If the path already exists and it is not empty, raise an error
-        err_msg = '''
-            {directory} already exists and it is not empty.
+        err_msg = f'''
+            {root_dir} already exists and it is not empty.
 
             Please try a different project name or root directory.
             
-            '''.format(directory=root_dir)
+            '''
         raise IOError(000, dedent(err_msg))
     else:
         make_folder(root_dir) #Create the root directory
@@ -30,13 +30,10 @@ def make_folder(path, prefix=''):
     os.mkdir(path)
 
     if os.path.exists(path) is False: #If we were unable to make the directory for some reason...
-        err_msg = 'Unable to create root directory {path_}. Unknown error!'.format(path_=path)
+        err_msg = f'Unable to create root directory {path}. Unknown error!'
         raise IOError(000, err_msg, '')
 
-    print("create: {prefix} {path_}".format(
-        prefix=prefix,
-        path_=os.path.abspath(path)
-    ))
+    print(f"create: {prefix} {os.path.abspath(path)}")
 
 def create_path(current_directory, new_folder_name):
     """Gets the absolute path of the new folder we're going to create"""
